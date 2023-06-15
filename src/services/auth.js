@@ -42,6 +42,13 @@ export const signin = async ( email, password ) => {
   return {user, token}
 }
 
-export const googleAuth = async () => {
+export const googleAuth = async (username, email, googleId, token) => {
+  const isUserExist = await User.findOne({ email })
+  if (isUserExist) {
+    return {user: isUserExist, token}
+  }
+
+  const user = await User.create({ username, email })
   
+  return {user, token}
 }
