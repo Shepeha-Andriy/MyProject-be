@@ -48,7 +48,7 @@ export const googleAuth = async (username, email, googleId, token) => {
     return {user: isUserExist, token}
   }
 
-  const user = await User.create({ username, email })
+  const user = await User.create({ username, email, googleId })
   
   return {user, token}
 }

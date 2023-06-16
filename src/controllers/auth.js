@@ -24,7 +24,7 @@ export const signin = async (req, res) => {
   }
 }
 
-export const googleAuth =async (req, res) => {
+export const googleAuth = async (req, res) => {
   try {
     const { username, email, googleId, token } = req.body
 
