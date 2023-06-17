@@ -3,6 +3,9 @@ import jwt from 'jsonwebtoken'
 import zxcvbn from 'zxcvbn'
 import User from "../models/User.js"
 
+import { BLOCK_TIME, MAX_LOGIN_ATTEMPT_TO_BLOCK } from '../utils/Constants.js'
+
+//sign up
 export const signup = async (firstName, lastName, email, password) => {
   const isUserExist = await User.findOne({ email })
   if (isUserExist) {
@@ -23,15 +26,39 @@ export const signup = async (firstName, lastName, email, password) => {
   return {user, token}
 }
 
+//sign in
 export const signin = async ( email, password ) => {
   const user = await User.findOne({ email })
   if (!user) {
     throw new Error('user width given email is not exist')
   }
 
+  if (user.loginAttempt.blockedUntil && user.loginAttempt.blockedUntil > new Date()) {
+    throw new Error('Account is blocked');
+  }
+
+  const isBlockEnd = new Date((new Date(user.loginAttempt.lastFailedAttempt)).getTime() + BLOCK_TIME);
+  if (isBlockEnd < new Date()) {
+    user.loginAttempt.failedAttempts = 0;
+    user.loginAttempt.blockedUntil = null;
+  }
+  
+  if (user.loginAttempt.blockedUntil && user.loginAttempt.blockedUntil < new Date() && user.loginAttempt.failedAttempts >= MAX_LOGIN_ATTEMPT_TO_BLOCK) {
+    user.loginAttempt.failedAttempts = 0;
+    user.loginAttempt.blockedUntil = null;
+  }
+
   const passMatch = await bcrypt.compare(password, user.password)
   if (!passMatch) {
-    throw new Error('wrong password or email')
+    user.loginAttempt.failedAttempts += 1;
+    user.loginAttempt.lastFailedAttempt = new Date();
+
+    if (user.loginAttempt.failedAttempts >= MAX_LOGIN_ATTEMPT_TO_BLOCK) {
+      user.loginAttempt.blockedUntil = new Date(Date.now() + BLOCK_TIME);
+    }
+
+    await user.save();
+    throw new Error('Invalid credentials');
   }
   
   const token = jwt.sign(
@@ -43,6 +70,7 @@ export const signin = async ( email, password ) => {
   return {user, token}
 }
 
+// google auth
 export const googleAuth = async (username, email, googleId, token) => {
   const isUserExist = await User.findOne({ email })
   if (isUserExist) {
@@ -54,6 +82,7 @@ export const googleAuth = async (username, email, googleId, token) => {
   return {user, token}
 }
 
+// checks
 export const checkPassword = (password, confirmpassword) => {
   if (password.length < 6) {
     throw new Error('password min length is 6')
