@@ -7,10 +7,11 @@ const limiter = rateLimit({
   max: 10, // Максимальна кількість запитів за 1 хвилину
 });
 
-import { signup, signin, googleAuth } from '../controllers/auth.js'
+import { signup, signin, googleAuth, activate } from '../controllers/auth.js'
 
 router.post('/signup', limiter, signup)
 router.post('/signin', limiter, signin)
 router.post('/google', limiter, googleAuth)
+router.get('/activate/:id', limiter, activate)
 
 export default router

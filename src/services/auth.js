@@ -6,14 +6,14 @@ import User from "../models/User.js"
 import { BLOCK_TIME, MAX_LOGIN_ATTEMPT_TO_BLOCK } from '../utils/Constants.js'
 
 //sign up
-export const signup = async (firstName, lastName, email, password) => {
+export const signup = async (firstname, lastname, email, password) => {
   const isUserExist = await User.findOne({ email })
   if (isUserExist) {
     throw new Error('user width given email is already exist')
   }
 
   const hashPass = await bcrypt.hash(password, 6)
-  const username = `${firstName} ${lastName}`
+  const username = `${firstname} ${lastname}`
 
   const user = await User.create({ username, email, password: hashPass })
   
@@ -94,7 +94,7 @@ export const checkPassword = (password, confirmpassword) => {
   }
 
   const passwordStrength = zxcvbn(password).score;
-  if (passwordStrength < 4) {
+  if (passwordStrength < 2) {
     throw new Error('password is too weak')
   }
 
@@ -105,12 +105,12 @@ export const checkPassword = (password, confirmpassword) => {
   return true
 }
 
-export const haveRequiredSignUpValues = (firstName, lastName, email, password, confirmpassword) => {
-  if (!firstName) {
+export const haveRequiredSignUpValues = (firstname, lastname, email, password, confirmpassword) => {
+  if (!firstname) {
     throw new Error('first name is required')
   }
 
-  if (!lastName) {
+  if (!lastname) {
     throw new Error('last name is required')
   }
 
@@ -161,6 +161,20 @@ export const haveRequiredGoogleAuthValues = ( username, email, googleId, token )
   if (token.length < 500) {
     throw new Error('token is not valid')
   }
+
+  return true
+}
+
+// activate mail
+export const activateMail = async ( id ) => {
+  const user = await User.findById(id)
+  
+  if (!user) {
+    throw new Error('wrong activation email link')
+  }
+
+  user.isActivated = true;
+  user.save()
 
   return true
 }

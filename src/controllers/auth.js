@@ -1,15 +1,18 @@
 import * as authService from '../services/auth.js'
+import sendActivationEmail from '../services/mail.js'
 
 export const signup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, confirmpassword } = req.body
+    const { firstname, lastname, email, password, confirmpassword } = req.body
 
-    authService.haveRequiredSignUpValues(firstName, lastName, email, password, confirmpassword)
+    authService.haveRequiredSignUpValues(firstname, lastname, email, password, confirmpassword)
     authService.checkPassword(password, confirmpassword)
     
-    const data = await authService.signup(firstName, lastName, email, password)
+    const data = await authService.signup(firstname, lastname, email, password)
 
-    res.status(200).json({message: 'sign up success', data})
+    await sendActivationEmail(email, `${process.env.SERVER_URL}/api/auth/activate/${data.user._id}`)
+
+    res.status(201).json({message: 'sign up success', data})
   } catch (error) {
     res.status(400).json({message: 'something went wrong during signup', err: error.message})
   }
@@ -40,5 +43,17 @@ export const googleAuth = async (req, res) => {
     res.status(200).json({message: 'google login success', data})
   } catch (error) {
     res.status(400).json({message: 'something went wrong during google auth', err: error.message})
+  }
+}
+
+export const activate = async (req, res) => {
+  try {
+    const { id } = req.params
+
+    authService.activateMail(id)
+
+    return res.redirect(`${process.env.CLIENT_URL}`);
+  } catch (error) {
+    res.status(400).json({message: 'something went wrong during email activation', err: error.message})
   }
 }
