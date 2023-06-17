@@ -94,7 +94,7 @@ export const checkPassword = (password, confirmpassword) => {
   }
 
   const passwordStrength = zxcvbn(password).score;
-  if (passwordStrength < 2) {
+  if (passwordStrength < 3) {
     throw new Error('password is too weak')
   }
 
@@ -116,6 +116,11 @@ export const haveRequiredSignUpValues = (firstname, lastname, email, password, c
 
   if (!email) {
     throw new Error('email is required')
+  }
+
+  const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$/
+  if (!emailPattern.test(email)) {
+    throw new Error('invalid email')
   }
 
   if (!password) {

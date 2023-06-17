@@ -10,7 +10,7 @@ export const signup = async (req, res) => {
     
     const data = await authService.signup(firstname, lastname, email, password)
 
-    await sendActivationEmail(email, `${process.env.SERVER_URL}/api/auth/activate/${data.user._id}`)
+    // await sendActivationEmail(email, `${process.env.SERVER_URL}/api/auth/activate/${data.user._id}`)
 
     res.status(201).json({message: 'sign up success', data})
   } catch (error) {
