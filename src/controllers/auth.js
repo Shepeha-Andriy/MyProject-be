@@ -2,7 +2,10 @@ import * as authService from '../services/auth.js'
 
 export const signup = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body
+    const { firstName, lastName, email, password, confirmpassword } = req.body
+
+    authService.haveRequiredSignUpValues(firstName, lastName, email, password, confirmpassword)
+    authService.checkPassword(password, confirmpassword)
     
     const data = await authService.signup(firstName, lastName, email, password)
 
@@ -16,6 +19,8 @@ export const signin = async (req, res) => {
   try {
     const { email, password } = req.body
     
+    authService.haveRequiredSignInValues(email, password)
+    
     const data = await authService.signin(email, password)
 
     res.status(200).json({message: 'sign in success', data})
@@ -28,6 +33,8 @@ export const googleAuth = async (req, res) => {
   try {
     const { username, email, googleId, token } = req.body
 
+    authService.haveRequiredGoogleAuthValues(username, email, googleId, token)
+    
     const data = await authService.googleAuth(username, email, googleId, token)
 
     res.status(200).json({message: 'google login success', data})

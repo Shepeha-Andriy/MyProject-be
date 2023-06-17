@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import zxcvbn from 'zxcvbn'
 import User from "../models/User.js"
 
 export const signup = async (firstName, lastName, email, password) => {
@@ -51,4 +52,86 @@ export const googleAuth = async (username, email, googleId, token) => {
   const user = await User.create({ username, email, googleId })
   
   return {user, token}
+}
+
+export const checkPassword = (password, confirmpassword) => {
+  if (password.length < 6) {
+    throw new Error('password min length is 6')
+  }
+  
+  const pattern = /^(?=.*[A-Z])(?=.*\d).+$/
+  if (!pattern.test(password)) {
+    throw new Error('password must contain at least one capital letter and one number') 
+  }
+
+  const passwordStrength = zxcvbn(password).score;
+  if (passwordStrength < 4) {
+    throw new Error('password is too weak')
+  }
+
+  if (password !== confirmpassword) {
+    throw new Error('password should be the same')
+  }
+
+  return true
+}
+
+export const haveRequiredSignUpValues = (firstName, lastName, email, password, confirmpassword) => {
+  if (!firstName) {
+    throw new Error('first name is required')
+  }
+
+  if (!lastName) {
+    throw new Error('last name is required')
+  }
+
+  if (!email) {
+    throw new Error('email is required')
+  }
+
+  if (!password) {
+    throw new Error('password is required')
+  }
+
+  if (!confirmpassword) {
+    throw new Error('confirmpassword is required')
+  }
+
+  return true
+}
+
+export const haveRequiredSignInValues = ( email, password ) => {
+  if (!email) {
+    throw new Error('email is required')
+  }
+
+  if (!password) {
+    throw new Error('password is required')
+  }
+
+  return true
+}
+
+export const haveRequiredGoogleAuthValues = ( username, email, googleId, token ) => {
+  if (!username) {
+    throw new Error('username is required')
+  }
+
+  if (!email) {
+    throw new Error('email is required')
+  }
+
+  if (!googleId) {
+    throw new Error('googleId is required')
+  }
+
+  if (!token) {
+    throw new Error('token is required')
+  }
+
+  if (token.length < 500) {
+    throw new Error('token is not valid')
+  }
+
+  return true
 }
