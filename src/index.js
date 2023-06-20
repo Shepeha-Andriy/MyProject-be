@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import donent from 'dotenv'
 
-import { i18next, langMiddleware } from './i18next.js';
+import { i18next, langMiddleware } from './utils/i18next.js';
 import authRoutes from './routes/auth.js';
 
 const app = express()

@@ -1,14 +1,8 @@
 import { I18n } from 'i18n'
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 export const i18next = new I18n({
   locales: ['en', 'ua'],
-  directory: path.join(__dirname, 'translation'),
+  directory: './src/translation',
   defaultLocale: 'en'
 })
 
