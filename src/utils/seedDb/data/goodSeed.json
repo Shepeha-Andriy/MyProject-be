@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Iphone",
+        "shortDescription": "Iphone 12 Pro",
+        "descriptions": "Iphone 11 Pro 256gb silver",
+        "type": "phone",
+        "companyOwner": "apple",
+        "images": [""],
+        "amount": 15,
+        "views": 10,
+        "params": {"ram": "4gb", "memory": "256gb", "display": "5.6"},
+        "price": 1399
+    },
+    {
+        "name": "Samsung",
+        "shortDescription": "Samsung Galaxy S23",
+        "descriptions": "Samsung Galaxy S23 512gb black",
+        "type": "phone",
+        "companyOwner": "samsung",
+        "images": [""],
+        "amount": 25,
+        "views": 210,
+        "params": {"ram": "8gb", "memory": "512gb", "display": "6.7"},
+        "price": 1499
+    },
+    {
+        "name": "Iphone",
+        "shortDescription": "Iphone 11 Pro",
+        "descriptions": "Iphone 11 Pro 132gb silver",
+        "type": "phone",
+        "companyOwner": "apple",
+        "images": [""],
+        "amount": 165,
+        "views": 170,
+        "params": {"ram": "4gb", "memory": "132gb", "display": "5.6"},
+        "price": 999
+    },
+    {
+        "name": "Samsung",
+        "shortDescription": "Samsung Galaxy M21",
+        "descriptions": "Samsung Galaxy M21 65gb green",
+        "type": "phone",
+        "companyOwner": "samsung",
+        "images": [""],
+        "amount": 4,
+        "views": 2210,
+        "params": {"ram": "4gb", "memory": "64gb", "display": "6.1"},
+        "price": 499
+    }
+]
