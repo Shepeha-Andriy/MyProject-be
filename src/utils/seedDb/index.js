@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 import fs from 'fs'
-import Good from "../../models/Good";
+import Good from "../../models/Good.js";
 import donent from 'dotenv'
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 donent.config()
 const mongoURL = process.env.DB_URL;

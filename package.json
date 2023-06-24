@@ -6,7 +6,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "loadDbGoods": "node ./src/utils/seedDb/index.js -l",
+    "deleteDbGoods": "node ./src/utils/seedDb/index.js -d"
   },
   "keywords": [],
   "author": "",

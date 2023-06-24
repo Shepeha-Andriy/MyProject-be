@@ -10,9 +10,13 @@ export const langMiddleware = (req, res, next) => {
   try {
     const lang = req.headers.lang
 
+    if (lang !== 'en' && lang !== 'ua') {
+      i18next.setLocale('en')
+      return next()
+    }
+
     if (!lang) {
       i18next.setLocale('en')
-      console.log(2)
       return next()
     }
     

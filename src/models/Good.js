@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema({
   name: { type: String, require: true },
-  shortDescription: { type: String, require: true, maxlength: 40 },
+  shortDescription: { type: String, require: true, maxlength: 60 },
   descrption: { type: String, require: true },
   type: { type: String, require: true },
   companyOwner: { type: String },

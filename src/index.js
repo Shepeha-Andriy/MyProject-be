@@ -5,6 +5,7 @@ import donent from 'dotenv'
 
 import { i18next, langMiddleware } from './utils/i18next.js';
 import authRoutes from './routes/auth.js';
+import goodRoutes from './routes/good.js';
 
 const app = express()
 donent.config()
@@ -20,6 +21,7 @@ app.get('/test/:len', (req, res) => {
   res.send({ testTranslation: i18next.__('test') })
 })
 app.use('/api/auth', authRoutes)
+app.use('/api/good', goodRoutes)
 
 const start = () => {
   try {
