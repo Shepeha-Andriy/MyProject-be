@@ -7,8 +7,14 @@ const limiter = rateLimit({
   max: 10, // Максимальна кількість запитів за 1 хвилину
 });
 
-import { getAll } from '../controllers/good.js'
+import { getAll, getCartGoods, addToCart, removeFromCart, increaseCart, decreaseCart } from '../controllers/good.js'
 
 router.get('/all', getAll)
+router.get('/cart', getCartGoods)
+
+router.post('/addTocart', addToCart)
+router.post('/removeFromCart', removeFromCart)
+router.post('/increaseCart', increaseCart)
+router.post('/decreaseCart', decreaseCart)
 
 export default router

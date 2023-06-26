@@ -1,4 +1,4 @@
-const sortGoods = (property = 'name') => {
+const sortGoods = (property) => {
   
   switch (property) {
     case 'name':
@@ -22,7 +22,7 @@ const sortGoods = (property = 'name') => {
       };
     
     default: 
-      return {}
+      return { name: 1 }
   }
 };
 
