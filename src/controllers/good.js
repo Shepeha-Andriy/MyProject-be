@@ -24,9 +24,9 @@ export const addToCart = async (req, res) => {
   try {
     const data = await goodService.addToCart(req.body)
     
-    res.status(200).json({ message: 'all goods success', data })
+    res.status(200).json({ message: 'add good to cart success', data })
   } catch (error) {
-    res.status(400).json({ message: 'something went wrong during get all goods', err: error.message })
+    res.status(400).json({ message: 'something went wrong during add good to cart', err: error.message })
   }
 }
 
@@ -34,9 +34,9 @@ export const removeFromCart = async (req, res) => {
   try {
     const data = await goodService.removeFromCart(req.body)
     
-    res.status(200).json({ message: 'all goods success', data })
+    res.status(200).json({ message: 'remove good from cart success', data })
   } catch (error) {
-    res.status(400).json({ message: 'something went wrong during get all goods', err: error.message })
+    res.status(400).json({ message: 'something went wrong during remove good from cart', err: error.message })
   }
 }
 
@@ -44,9 +44,9 @@ export const increaseCart = async (req, res) => {
   try {
     const data = await goodService.increaseCart(req.body)
     
-    res.status(200).json({ message: 'all goods success', data })
+    res.status(200).json({ message: 'increase cart success', data })
   } catch (error) {
-    res.status(400).json({ message: 'something went wrong during get all goods', err: error.message })
+    res.status(400).json({ message: 'something went wrong during increase cart', err: error.message })
   }
 }
 
@@ -54,8 +54,8 @@ export const decreaseCart = async (req, res) => {
   try {
     const data = await goodService.decreaseCart(req.body)
     
-    res.status(200).json({ message: 'all goods success', data })
+    res.status(200).json({ message: 'decrease cart success', data })
   } catch (error) {
-    res.status(400).json({ message: 'something went wrong during get all goods', err: error.message })
+    res.status(400).json({ message: 'something went wrong during decrease cart', err: error.message })
   }
 }
