@@ -8,13 +8,14 @@ const limiter = rateLimit({
 });
 
 import { getAll, getCartGoods, addToCart, removeFromCart, increaseCart, decreaseCart } from '../controllers/good.js'
+import { authMiddleware } from '../middlewares/auth.js';
 
 router.get('/all', getAll)
-router.get('/cart', getCartGoods)
+router.get('/cart', authMiddleware, getCartGoods)
 
-router.post('/addTocart', addToCart)
-router.post('/removeFromCart', removeFromCart)
-router.post('/increaseCart', increaseCart)
-router.post('/decreaseCart', decreaseCart)
+router.post('/addTocart', authMiddleware, addToCart)
+router.post('/removeFromCart', authMiddleware, removeFromCart)
+router.post('/increaseCart', authMiddleware, increaseCart)
+router.post('/decreaseCart', authMiddleware, decreaseCart)
 
 export default router

@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
-import User from '../models/User'
+import User from '../models/User.js'
 
 export const authMiddleware = async (req, res, next) => {
   try {
-    const token = req.headers.Authorization.split(' ')[1]
+    const token = req.headers.authorization.split(' ')[1]
     const isCustomAuth = token.length < 500
     
     let decodedData
@@ -17,8 +17,8 @@ export const authMiddleware = async (req, res, next) => {
       
       const googleId = decodedData?.sub.toString()
       const user = await User.findOne({ googleId })
-
-      req.userId = user?._id
+  
+      req.userId = user?._id.toString()
     }
 
     next()

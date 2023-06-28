@@ -12,7 +12,7 @@ export const getAll = async (req, res) => {
 
 export const getCartGoods = async (req, res) => {
   try {
-    const data = await goodService.getCartGoods(req.query)
+    const data = await goodService.getCartGoods({ ...req.body, userId: req.userId })
     
     res.status(200).json({ message: 'all goods success', data })
   } catch (error) {
@@ -22,7 +22,7 @@ export const getCartGoods = async (req, res) => {
 
 export const addToCart = async (req, res) => {
   try {
-    const data = await goodService.addToCart(req.body)
+    const data = await goodService.addToCart({ ...req.body, userId: req.userId })
     
     res.status(200).json({ message: 'add good to cart success', data })
   } catch (error) {
@@ -32,7 +32,7 @@ export const addToCart = async (req, res) => {
 
 export const removeFromCart = async (req, res) => {
   try {
-    const data = await goodService.removeFromCart(req.body)
+    const data = await goodService.removeFromCart({ ...req.body, userId: req.userId })
     
     res.status(200).json({ message: 'remove good from cart success', data })
   } catch (error) {
@@ -42,7 +42,7 @@ export const removeFromCart = async (req, res) => {
 
 export const increaseCart = async (req, res) => {
   try {
-    const data = await goodService.increaseCart(req.body)
+    const data = await goodService.increaseCart({ ...req.body, userId: req.userId })
     
     res.status(200).json({ message: 'increase cart success', data })
   } catch (error) {
@@ -52,7 +52,7 @@ export const increaseCart = async (req, res) => {
 
 export const decreaseCart = async (req, res) => {
   try {
-    const data = await goodService.decreaseCart(req.body)
+    const data = await goodService.decreaseCart({ ...req.body, userId: req.userId })
     
     res.status(200).json({ message: 'decrease cart success', data })
   } catch (error) {

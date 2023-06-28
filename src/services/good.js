@@ -28,11 +28,11 @@ export const getAll = async (params) => {
 export const getCartGoods = async (params) => {
   const user = await User.findById(params.userId);
   const cartItems = user.cart;
-
+  
   const page = Number(params.page) || 1
   const startIndex = (page - 1) * 8
   const pages = Math.ceil(await Good.countDocuments({ _id: { $in: Object.keys(cartItems).slice(2) } }) / 8)
-  
+
   const goods = await Good.find({ _id: { $in: Object.keys(cartItems).slice(2) } }).skip(startIndex)
   
   return { page, pages, length: goods.length, goods: goods.slice(0, 8) }
