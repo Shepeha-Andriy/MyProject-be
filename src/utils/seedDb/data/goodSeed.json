@@ -1,7 +1,7 @@
 [
     {
         "name": "Iphone",
-        "shortDescription": "Iphone 12 Pro",
+        "shortDescription": "Iphone 15 Pro",
         "description": "Iphone 11 Pro 256gb silver",
         "type": "phone",
         "companyOwner": "apple",
@@ -13,7 +13,7 @@
     },
     {
         "name": "Samsung",
-        "shortDescription": "Samsung Galaxy S23",
+        "shortDescription": "Samsung Galaxy S24",
         "description": "Samsung Galaxy S23 512gb black",
         "type": "phone",
         "companyOwner": "samsung",
@@ -25,7 +25,7 @@
     },
     {
         "name": "Iphone",
-        "shortDescription": "Iphone 11 Pro",
+        "shortDescription": "Iphone x Pro",
         "description": "Iphone 11 Pro 132gb silver",
         "type": "phone",
         "companyOwner": "apple",
@@ -37,7 +37,7 @@
     },
     {
         "name": "Samsung",
-        "shortDescription": "Samsung Galaxy M21",
+        "shortDescription": "Samsung Galaxy M31",
         "description": "Samsung Galaxy M21 65gb green",
         "type": "phone",
         "companyOwner": "samsung",

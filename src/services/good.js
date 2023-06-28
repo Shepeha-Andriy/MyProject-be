@@ -31,10 +31,11 @@ export const getCartGoods = async (params) => {
 
   const page = Number(params.page) || 1
   const startIndex = (page - 1) * 8
-
+  const pages = Math.ceil(await Good.countDocuments({ _id: { $in: Object.keys(cartItems).slice(2) } }) / 8)
+  
   const goods = await Good.find({ _id: { $in: Object.keys(cartItems).slice(2) } }).skip(startIndex)
-
-  return { page, pages: Math.ceil(goods.length / 8), length: goods.length, goods: goods.slice(0, 8) }
+  
+  return { page, pages, length: goods.length, goods: goods.slice(0, 8) }
 }
 
 export const addToCart = async ({ userId, productId, price }) => {
@@ -83,7 +84,7 @@ export const increaseCart = async ({ userId, productId, price }) => {
   user.markModified('cart');
   await user.save();
 
-  return user
+  return { user, amount: userCart.amount, cost: userCart.cost }
 }
 
 export const decreaseCart = async ({ userId, productId, price }) => {
@@ -98,5 +99,5 @@ export const decreaseCart = async ({ userId, productId, price }) => {
   user.markModified('cart');
   await user.save();
 
-  return user
+  return { user, amount: userCart.amount, cost: userCart.cost }
 }
