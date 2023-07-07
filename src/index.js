@@ -6,6 +6,7 @@ import donent from 'dotenv'
 import { i18next, langMiddleware } from './utils/i18next.js';
 import authRoutes from './routes/auth.js';
 import goodRoutes from './routes/good.js';
+import cartRoutes from './routes/cart.js';
 
 const app = express()
 donent.config()
@@ -22,6 +23,7 @@ app.get('/test/:len', (req, res) => {
 })
 app.use('/api/auth', authRoutes)
 app.use('/api/good', goodRoutes)
+app.use('/api/cart', cartRoutes)
 
 const start = () => {
   try {

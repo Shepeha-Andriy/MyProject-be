@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import zxcvbn from 'zxcvbn'
 import User from "../models/User.js"
+import Cart from "../models/Cart.js"
 
 import { BLOCK_TIME, MAX_LOGIN_ATTEMPT_TO_BLOCK } from '../utils/Constants.js'
 
@@ -78,7 +79,10 @@ export const googleAuth = async (username, email, googleId, token) => {
   }
 
   const user = await User.create({ username, email, googleId })
-  
+  const cart = await Cart.create({ owner: user._id })
+  user.cart = cart._id
+  await user.save()
+
   return {user, token}
 }
 

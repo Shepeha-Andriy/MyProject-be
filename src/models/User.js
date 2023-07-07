@@ -12,13 +12,14 @@ const schema = new mongoose.Schema({
     lastFailedAttempt: Date,
     blockedUntil: Date,
   },
-  cart: {
-    type: Object,
-    default: {
-      amount: 0,
-      cost: 0
-    }
-  },
+  // cart: {
+  //   type: Object,
+  //   default: {
+  //     amount: 0,
+  //     cost: 0
+  //   }
+  // },
+  cart: {type: mongoose.Schema.Types.ObjectId, ref: 'Cart'},
   createdAt: {type: Date, default: new Date()}
 })
 
