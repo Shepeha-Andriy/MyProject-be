@@ -109,34 +109,34 @@ export const checkPassword = (password, confirmpassword) => {
   return true
 }
 
-export const haveRequiredSignUpValues = (firstname, lastname, email, password, confirmpassword) => {
-  if (!firstname) {
-    throw new Error('first name is required')
-  }
+// export const haveRequiredSignUpValues = (firstname, lastname, email, password, confirmpassword) => {
+//   if (!firstname) {
+//     throw new Error('first name is required')
+//   }
 
-  if (!lastname) {
-    throw new Error('last name is required')
-  }
+//   if (!lastname) {
+//     throw new Error('last name is required')
+//   }
 
-  if (!email) {
-    throw new Error('email is required')
-  }
+//   if (!email) {
+//     throw new Error('email is required')
+//   }
 
-  const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$/
-  if (!emailPattern.test(email)) {
-    throw new Error('invalid email')
-  }
+//   const emailPattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$/
+//   if (!emailPattern.test(email)) {
+//     throw new Error('invalid email')
+//   }
 
-  if (!password) {
-    throw new Error('password is required')
-  }
+//   if (!password) {
+//     throw new Error('password is required')
+//   }
 
-  if (!confirmpassword) {
-    throw new Error('confirmpassword is required')
-  }
+//   if (!confirmpassword) {
+//     throw new Error('confirmpassword is required')
+//   }
 
-  return true
-}
+//   return true
+// }
 
 export const haveRequiredSignInValues = ( email, password ) => {
   if (!email) {

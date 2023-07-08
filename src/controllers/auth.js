@@ -1,11 +1,13 @@
 import * as authService from '../services/auth.js'
 import sendActivationEmail from '../services/mail.js'
+import { signUpValidation } from '../validation/user.js'
 
 export const signup = async (req, res) => {
   try {
     const { firstname, lastname, email, password, confirmpassword } = req.body
 
-    authService.haveRequiredSignUpValues(firstname, lastname, email, password, confirmpassword)
+    signUpValidation(req.body)
+    // authService.haveRequiredSignUpValues(firstname, lastname, email, password, confirmpassword)
     authService.checkPassword(password, confirmpassword)
     
     const data = await authService.signup(firstname, lastname, email, password)
