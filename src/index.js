@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose'
 import cors from 'cors'
 import donent from 'dotenv'
+import helmet from 'helmet'
 
 import { i18next, langMiddleware } from './utils/i18next.js';
 import authRoutes from './routes/auth.js';
@@ -16,6 +17,7 @@ app.use(cors())
 app.use(express.json())
 app.use(i18next.init)
 app.use(langMiddleware)
+app.use(helmet())
 
 //Routes
 app.get('/test/:len', (req, res) => {
