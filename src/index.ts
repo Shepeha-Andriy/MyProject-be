@@ -1,5 +1,5 @@
 import express from 'express';
-import mongoose from 'mongoose'
+import mongoose, { ConnectOptions } from 'mongoose'
 import cors from 'cors'
 import donent from 'dotenv'
 import helmet from 'helmet'
@@ -32,7 +32,7 @@ const start = () => {
     mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-    })
+    } as ConnectOptions);
   
     app.listen(process.env.PORT, () => {
       console.log(`server started at ${process.env.PORT} port`)

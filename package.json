@@ -5,8 +5,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js",
+    "build": "tsc",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon ./src/index.ts",
     "loadDbGoods": "node ./src/utils/seedDb/index.js -l",
     "deleteDbGoods": "node ./src/utils/seedDb/index.js -d"
   },
@@ -28,6 +29,8 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "@types/node": "^20.4.1",
+    "nodemon": "^2.0.22",
+    "typescript": "^5.1.6"
   }
 }

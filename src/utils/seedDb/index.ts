@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ConnectOptions } from "mongoose";
 import fs from 'fs'
 import Good from "../../models/Good.js";
 import donent from 'dotenv'
@@ -11,17 +11,18 @@ donent.config()
 const mongoURL = process.env.DB_URL;
 
 mongoose.set("strictQuery", false);
-mongoose.connect(mongoURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.catch((err) => {
-  console.log(err.stack);
-  process.exit(1);
-})
-.then(() => {
-  console.log("connected to db in development environment");
-});
+mongoose
+  .connect(mongoURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as ConnectOptions)
+  .catch((err) => {
+    console.log(err.stack);
+    process.exit(1);
+  })
+  .then(() => {
+    console.log("connected to db in development environment");
+  });
 
 const users = JSON.parse(fs.readFileSync(`${__dirname}/data/goodSeed.json`, 'utf-8'))
 
