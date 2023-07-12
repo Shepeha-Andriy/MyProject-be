@@ -6,7 +6,7 @@ import sortGoods from '../utils/sortGoods.js'
 export const getAll = async (params) => {
   let goods;
   const page = Number(params.page) || 1
-  const sortParams = sortGoods(params.sort)
+  const sortParams: any = sortGoods(params.sort)
   const totalLength = await Good.countDocuments({})
   let length = await Good.countDocuments({})
   let pages = 1
