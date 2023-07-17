@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const schema = new mongoose.Schema({
   owner: { type: String, require: true },
   status: { type: String, require: true },
+  location: { type: String, require: true },
   description: { type: String },
   items: { type: Object },
   amount: { type: Number, default: 0 },

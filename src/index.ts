@@ -8,6 +8,7 @@ import { i18next, langMiddleware } from './utils/i18next.js';
 import authRoutes from './routes/auth.js';
 import goodRoutes from './routes/good.js';
 import cartRoutes from './routes/cart.js';
+import orderRoutes from './routes/order.js';
 
 const app = express()
 donent.config()
@@ -26,6 +27,7 @@ app.get('/test', (req, res) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/good', goodRoutes)
 app.use('/api/cart', cartRoutes)
+app.use('/api/order', orderRoutes)
 
 const start = () => {
   try {
