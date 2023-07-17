@@ -20,7 +20,7 @@ app.use(langMiddleware)
 app.use(helmet())
 
 //Routes
-app.get('/test/:len', (req, res) => {
+app.get('/test', (req, res) => {
   res.send({ testTranslation: i18next.__('test') })
 })
 app.use('/api/auth', authRoutes)
