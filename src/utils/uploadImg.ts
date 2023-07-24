@@ -4,8 +4,7 @@ import sharp from "sharp";
 export const buffer = multer({
   storage: multer.memoryStorage(),
   fileFilter: (req, file, callback) => {
-    // console.log(file);
-    // console.log(1);
+    console.log(file);
     if (file.mimetype.startsWith("image")) {
       callback(null, true);
     } else {
@@ -16,14 +15,7 @@ export const buffer = multer({
   },
 });
 
-// export const uploadImg = (req, res) => {
-//   console.log(req.file)
-//   return res.json({
-//     url: `/uploads/img/${req.file.originalname}`,
-//   });
-// };
-
-export const compressAvatar = async ( req, res, next ) => {
+export const compressAvatar = async (req, res, next) => {
   if (!req.files) {
     return next();
   }

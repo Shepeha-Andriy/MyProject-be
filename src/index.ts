@@ -35,8 +35,6 @@ app.post("/test", buffer.array('image', 5), compressAvatar, async(req: any, res)
   const absoluteAvatarsFolderPath = path.resolve("uploads", "img");
   
   for (const file of req.files) {
-    console.log(1)
-    console.log(file)
     await sharp(file.buffer).toFile(
       path.join(absoluteAvatarsFolderPath, file.originalname)
     );

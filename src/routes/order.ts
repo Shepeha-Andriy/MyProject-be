@@ -10,7 +10,7 @@ const limiter = rateLimit({
 import { create, capture } from "../controllers/order.js";
 import { authMiddleware } from "../middlewares/auth.js";
 
-router.post("/create", create);
-router.post("/capture", capture);
+router.post("/create", authMiddleware, create);
+router.post("/capture", authMiddleware, capture);
 
 export default router;
