@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  owner: { type: String, require: true },
+  owner: { type: mongoose.Types.ObjectId, ref: 'User', require: true },
   orderId: { type: String, require: true, unique: true },
   status: { type: String, default: 'created' },  //створений, підтверджений, зафейлений, скасований, надісланий, доставлений
   location: { type: String },

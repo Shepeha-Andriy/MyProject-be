@@ -31,6 +31,7 @@ app.use('/api/order', orderRoutes)
 import { buffer, compressAvatar } from './utils/uploadImg.js';
 import sharp from "sharp";
 import path from 'path';
+import { scheduleJobs } from './utils/schedule.js';
 app.post("/test", buffer.array('image', 5), compressAvatar, async(req: any, res) => {
   const absoluteAvatarsFolderPath = path.resolve("uploads", "img");
   
@@ -43,12 +44,14 @@ app.post("/test", buffer.array('image', 5), compressAvatar, async(req: any, res)
   res.send({ testTranslation: i18next.__("test") });
 });
 
-const start = () => {
+const start = async () => {
   try {
     mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as ConnectOptions);
+
+    await scheduleJobs()
   
     app.listen(process.env.PORT, () => {
       console.log(`server started at ${process.env.PORT} port`)

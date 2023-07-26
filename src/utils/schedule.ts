@@ -1,24 +1,26 @@
 import { CronJob } from 'cron';
 import Order from '../models/Order.js';
 
-export const jobs = new Map<string, CronJob>();
+export const jobs = new Map();
 
-export const scheduleOrderConfirmedJob = (
-  order
-) => {
+export async function scheduleOrderConfirmedJob( order ) {
   const jobIdOdj = order._id;
   const jobId = jobIdOdj.toString();
+
+  if (order.jobTime < Date.now()) {
+    order.jobTime = new Date(Date.now() + 1 * 1000);
+  }
+
   try {
     const job = new CronJob(
       order.jobTime,
       async function () {
-
-        order.jobTime = new Date(Date.now() + 60 * 1000)
+        order.jobTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
         order.status = 'sent'
         order.save()
         
-        await scheduleOrderSentJob(order)
-        console.log('sent')
+        scheduleOrderSentJob(order)
+        
         job.stop();
         jobs.delete(jobId);
       },
@@ -26,26 +28,29 @@ export const scheduleOrderConfirmedJob = (
       true
     );
 
-    jobs.set(jobId, job);
+    const populatedOrder = await order.populate("owner");
+    jobs.set(jobId, populatedOrder);
   } catch (error) {
     console.log('shedule err')
   }
 };
 
-export const scheduleOrderSentJob = (
-  order
-) => {
+export async function scheduleOrderSentJob(order) {
   const jobIdOdj = order._id;
   const jobId = jobIdOdj.toString();
+
+  if (order.jobTime < Date.now()) {
+    order.jobTime = new Date(Date.now() + 1 * 1000);
+  }
+
   try {
     const job = new CronJob(
       order.jobTime,
       async function () {
+        order.jobTime = null;
+        order.status = "delivered";
+        order.save();
 
-        order.jobTime = null
-        order.status = 'delivered'
-        order.save()
-        console.log("delivered");
         job.stop();
         jobs.delete(jobId);
       },
@@ -53,93 +58,38 @@ export const scheduleOrderSentJob = (
       true
     );
 
-    jobs.set(jobId, job);
-
+    const populatedOrder = await order.populate('owner')
+    jobs.set(jobId, populatedOrder);
   } catch (error) {
     console.log('shedule err')
   }
 };
 
-// export const scheduleJobs = async () => {
-//   const notifications = await Notification.find({
-//     type: {
-//       $in: [
-//         NotificationTypes.firstLesson,
-//         NotificationTypes.negativeBalanceBeforeLessonTutor,
-//         NotificationTypes.negativeBalanceBeforeLessonStudent,
-//       ],
-//     },
-//   })
-//     .populate<{ lesson: IHydratedLesson }>('lesson')
-//     .exec();
+export const scheduleJobs = async () => {
+  const orders = await Order.find({
+    $or: [{ status: "confirmed" }, { status: "sent" }],
+  }).exec()
 
-//   notifications.forEach(notification => {
-//     if (!notification.lesson) return;
-//     try {
-//       if (!notification.jobTime) {
-//         throw new AppError(
-//           `jobTime is missing in notification with id ${notification._id}`,
-//           500
-//         );
-//       }
+  for (const order of orders) {
+    if (!order) return;
+    try {
+      if (!order.jobTime) {
+        throw new Error(`jobTime is missing in order with id ${order._id}`);
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
-//       if (notification.jobTime < new Date()) return;
-//     } catch (error) {
-//       logError(error);
-//     }
+    if (order.status === "confirmed") {
+      await scheduleOrderConfirmedJob(order);
+    }
 
-//     const depopulatedNotification = notification.depopulate();
+    if (order.status === "sent") {
+      await scheduleOrderSentJob(order);
+    }
+  }
 
-//     if (notification.type === NotificationTypes.firstLesson) {
-//       return scheduleFirstLessonNotificationJob(depopulatedNotification);
-//     }
-
-//     if (
-//       notification.type === NotificationTypes.negativeBalanceBeforeLessonTutor
-//     ) {
-//       return scheduleNegativeBalanceBeforeLessonTutorNotificationJob(
-//         depopulatedNotification
-//       );
-//     }
-
-//     if (
-//       notification.type === NotificationTypes.negativeBalanceBeforeLessonStudent
-//     ) {
-//       return scheduleNegativeBalanceBeforeLessonStudentNotificationJob(
-//         depopulatedNotification
-//       );
-//     }
-//   });
-// };
-
-//////////////////////////////////////////////////
-// const deleteAvailableTimeStudyperiodsAndRedis = async () => {
-//   logServerRunning(
-//     'AvailableTime of study periods has been reset and Redis cache has been cleared.'
-//   );
-//   const startTime = new Date(
-//     Date.now() - tutorTimeConstraintsForLessons * 60 * 1000
-//   );
-//   const endTime = new Date(
-//     Date.now() - TimeConstraintsForSearchStudyperiods * 60 * 1000
-//   );
-//   await StudyPeriod.updateMany(
-//     {
-//       startsAt: {
-//         $lt: startTime,
-//         $gte: endTime,
-//       },
-//     },
-//     { $set: { availableTime: 0 } }
-//   );
-//   // Deleting Redis cache.
-//   await redisService.deleteKeyAll();
-// };
-
-// // Creating a cron job to execute the function every day at midnight (00:00).
-// const cronSchedule = '0 0 * * *'; // '0 0 * * *' - Schedule for midnight.
-// // const cronSchedule = '*/2 * * * *'; // Schedule for every 10 minutes.
-// export const job = new CronJob(
-//   cronSchedule,
-//   deleteAvailableTimeStudyperiodsAndRedis
-// );
+  console.log(jobs);
+  console.log('job sheduled successfully');
+  return 'job sheduled successfully'
+};
