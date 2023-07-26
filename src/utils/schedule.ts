@@ -13,12 +13,12 @@ export const scheduleOrderConfirmedJob = (
       order.jobTime,
       async function () {
 
-        order.jobTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        order.jobTime = new Date(Date.now() + 60 * 1000)
         order.status = 'sent'
         order.save()
         
         await scheduleOrderSentJob(order)
-
+        console.log('sent')
         job.stop();
         jobs.delete(jobId);
       },
@@ -45,7 +45,7 @@ export const scheduleOrderSentJob = (
         order.jobTime = null
         order.status = 'delivered'
         order.save()
-
+        console.log("delivered");
         job.stop();
         jobs.delete(jobId);
       },
