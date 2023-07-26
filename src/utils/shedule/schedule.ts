@@ -1,9 +1,9 @@
-import { CronJob } from 'cron';
-import Order from '../models/Order.js';
+import { CronJob } from "cron";
+import Order from "../../models/Order.js";
 
 export const jobs = new Map();
 
-export async function scheduleOrderConfirmedJob( order ) {
+export async function scheduleOrderConfirmedJob(order) {
   const jobIdOdj = order._id;
   const jobId = jobIdOdj.toString();
 
@@ -15,12 +15,12 @@ export async function scheduleOrderConfirmedJob( order ) {
     const job = new CronJob(
       order.jobTime,
       async function () {
-        order.jobTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-        order.status = 'sent'
-        order.save()
-        
-        scheduleOrderSentJob(order)
-        
+        order.jobTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+        order.status = "sent";
+        order.save();
+
+        scheduleOrderSentJob(order);
+
         job.stop();
         jobs.delete(jobId);
       },
@@ -31,9 +31,9 @@ export async function scheduleOrderConfirmedJob( order ) {
     const populatedOrder = await order.populate("owner");
     jobs.set(jobId, populatedOrder);
   } catch (error) {
-    console.log('shedule err')
+    console.log("shedule err");
   }
-};
+}
 
 export async function scheduleOrderSentJob(order) {
   const jobIdOdj = order._id;
@@ -58,17 +58,17 @@ export async function scheduleOrderSentJob(order) {
       true
     );
 
-    const populatedOrder = await order.populate('owner')
+    const populatedOrder = await order.populate("owner");
     jobs.set(jobId, populatedOrder);
   } catch (error) {
-    console.log('shedule err')
+    console.log("shedule err");
   }
-};
+}
 
 export const scheduleJobs = async () => {
   const orders = await Order.find({
     $or: [{ status: "confirmed" }, { status: "sent" }],
-  }).exec()
+  }).exec();
 
   for (const order of orders) {
     if (!order) return;
@@ -89,7 +89,11 @@ export const scheduleJobs = async () => {
     }
   }
 
-  console.log(jobs);
-  console.log('job sheduled successfully');
-  return 'job sheduled successfully'
+  // console.log(jobs);
+  console.log("job sheduled successfully");
+  return "job sheduled successfully";
 };
+
+export const getJobs = () => {
+  return Array.from(jobs.values());
+}

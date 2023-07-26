@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Моя EJS-сторінка</title>
+
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+    }
+
+    td {
+      padding-left: 20px;
+    }
+    
+    th {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Привіт, це моя EJS-сторінка на Node.js!</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Job Time</th>
+        <th>Order Id</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (let item of data) { %>
+        <tr>
+          <td>
+            <%= item.owner.username %>
+          </td>
+          <td>
+            <%= item.jobTime %>
+          </td>
+          <td>
+            <%= item.orderId %>
+          </td>
+        </tr>
+        <% } %>
+    </tbody>
+  </table>
+</body>
+
+</html>

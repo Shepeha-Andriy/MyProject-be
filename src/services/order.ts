@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import donent from "dotenv";
 import Order from "../models/Order.js";
-import { scheduleOrderConfirmedJob } from "../utils/schedule.js";
+import { scheduleOrderConfirmedJob } from "../utils/shedule/schedule.js";
 donent.config();
 
 const { CLIENT_ID, APP_SECRET } = process.env;
@@ -51,42 +51,43 @@ export async function capturePayment(orderId) {
 
 //fail Payment
 export async function failedPayment(orderId) {
-  await Order.findOneAndDelete({ orderId })
+  await Order.findOneAndDelete({ orderId });
 
-  return 1
+  return 1;
 }
 
 //cancel Payment
 export async function cancelOrder(orderId) {
-  
-
-  return 1
+  return 1;
 }
 
 // create Order
 export const createOrder = async (data) => {
-  const order = await Order.create({ owner: data.userId, orderId: data.orderId })
-  
-  return order._id
-}
+  const order = await Order.create({
+    owner: data.userId,
+    orderId: data.orderId,
+  });
+
+  return order._id;
+};
 
 // capture Order
 export const captureOrder = async (orderId) => {
-  const order = await Order.findOne({ orderId })
+  const order = await Order.findOne({ orderId });
 
   if (!order) {
-    throw Error('order not found')
+    throw Error("order not found");
   }
 
-  order.status = 'confirmed'
+  order.status = "confirmed";
   // order.jobTime = new Date(Date.now() + 3 * 60 * 60 * 1000);
   order.jobTime = new Date(Date.now() + 10 * 1000);
-  await order.save()
+  await order.save();
 
-  scheduleOrderConfirmedJob(order)
+  scheduleOrderConfirmedJob(order);
 
-  return order
-}
+  return order;
+};
 
 // auxiliary func for payment  допоміжні функції для пейментів
 export async function generateAccessToken() {
