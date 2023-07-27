@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import donent from "dotenv";
 import Order from "../models/Order.js";
-import { scheduleOrderConfirmedJob } from "../utils/shedule/schedule.js";
+import { scheduleOrderConfirmedJob } from "../utils/schedule/schedule.js";
 donent.config();
 
 const { CLIENT_ID, APP_SECRET } = process.env;
@@ -80,8 +80,7 @@ export const captureOrder = async (orderId) => {
   }
 
   order.status = "confirmed";
-  // order.jobTime = new Date(Date.now() + 3 * 60 * 60 * 1000);
-  order.jobTime = new Date(Date.now() + 10 * 1000);
+  order.jobTime = new Date(Date.now() + 3 * 60 * 60 * 1000);
   await order.save();
 
   scheduleOrderConfirmedJob(order);

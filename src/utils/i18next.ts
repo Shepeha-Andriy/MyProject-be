@@ -2,7 +2,7 @@ import { I18n } from 'i18n'
 
 export const i18next = new I18n({
   locales: ['en', 'ua'],
-  directory: './src/translation',
+  directory: './translation',
   defaultLocale: 'en'
 })
 

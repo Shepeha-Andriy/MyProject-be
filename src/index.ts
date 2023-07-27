@@ -10,15 +10,14 @@ import authRoutes from "./routes/auth.js";
 import goodRoutes from "./routes/good.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/order.js";
-import { getJobs, scheduleJobs } from "./utils/shedule/schedule.js";
+import { getJobs, scheduleJobs } from "./utils/schedule/schedule.js";
 import { pathToSrc } from "./utils/Constants.js";
 
 //Settings
 const app = express();
 donent.config();
-app.set("views", path.join(pathToSrc, "utils", "shedule"));
+app.set("views", path.join(pathToSrc, "utils", "schedule"));
 app.set("view engine", "ejs");
-
 
 //Middleware
 app.use(cors());
@@ -53,10 +52,10 @@ app.post(
     res.send({ testTranslation: i18next.__("test") });
   }
 );
-app.get("/shedule", (req, res) => {
-  const data = getJobs()
+app.get("/schedule", (req, res) => {
+  const data = getJobs();
 
-  res.render("shedule", { data });
+  res.render("schedule", { data });
 });
 
 //Start

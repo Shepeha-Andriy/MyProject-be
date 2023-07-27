@@ -8,4 +8,4 @@ const _dirname = dirname(filename2);
 
 export const pathToSrc = path.dirname(path.resolve(_dirname));
 export const BLOCK_TIME = 5 * 60 * 1000;
-export const MAX_LOGIN_ATTEMPT_TO_BLOCK = 5;
+export const MAX_LOGIN_ATTEMPT_TO_BLOCK = 15;

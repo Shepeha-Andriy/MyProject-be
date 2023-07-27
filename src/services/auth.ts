@@ -5,6 +5,7 @@ import User from "../models/User.js"
 import Cart from "../models/Cart.js"
 
 import { BLOCK_TIME, MAX_LOGIN_ATTEMPT_TO_BLOCK } from '../utils/Constants.js'
+import { signInInvalidCredentials } from '../messages/errorMessages.js'
 
 //sign up
 export const signup = async (firstname, lastname, email, password) => {
@@ -59,7 +60,7 @@ export const signin = async ( email, password ) => {
     }
 
     await user.save();
-    throw new Error('Invalid credentials');
+    throw new Error(signInInvalidCredentials());
   }
   
   const token = jwt.sign(

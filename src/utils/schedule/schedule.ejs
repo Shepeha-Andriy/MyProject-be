@@ -25,9 +25,10 @@
   <table>
     <thead>
       <tr>
-        <th>First Name</th>
+        <th>Username</th>
         <th>Job Time</th>
         <th>Order Id</th>
+        <th>Status</th>
       </tr>
     </thead>
     <tbody>
@@ -41,6 +42,9 @@
           </td>
           <td>
             <%= item.orderId %>
+          </td>
+          <td>
+            <%= item.status %>
           </td>
         </tr>
         <% } %>
