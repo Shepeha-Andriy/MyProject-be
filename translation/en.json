@@ -1,4 +1,15 @@
 {
-	"test": "Test",
-	"SignInInvalidCredentials": "Invalid credentials"
+	"test": "Тест",
+
+
+	"ErrorMessages": "ErrorMessages",
+
+	"SignInInvalidCredentials": "Невірні дані",
+
+
+
+	"NotificationsMessages": "NotificationsMessages",
+
+	"OrderDeliveredEn": "Order successfully delivered",
+	"OrderDeliveredUa": "Замовлення успішно доставлене"
 }

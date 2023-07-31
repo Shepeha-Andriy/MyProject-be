@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth.js";
 import goodRoutes from "./routes/good.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/order.js";
+import notificationRoutes from "./routes/notification.js";
 import { getJobs, scheduleJobs } from "./utils/schedule/schedule.js";
 import { pathToSrc } from "./utils/Constants.js";
 
@@ -32,6 +33,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/good", goodRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/notification", notificationRoutes);
 
 //Test
 import { buffer, compressAvatar } from "./utils/uploadImg.js";

@@ -6,7 +6,6 @@ export const create = async (req, res) => {
     const orderId = await orderService.createOrder({ ...req.body, userId: req.userId, orderId: data.id })
    
     res.status(200).json({ message: "payment successfully created", data: { ...data, orderId } });
-    // res.status(200).json({ message: "payment successfully created", data: {...data} });
   } catch (error) {
     res
       .status(400)
