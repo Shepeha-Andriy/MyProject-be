@@ -27,7 +27,7 @@ app.use(cors());
 app.use(express.json());
 app.use(i18next.init);
 app.use(langMiddleware);
-app.use(helmet());
+// app.use(helmet());
 app.use("/api/uploads/img", express.static("uploads/img"));
 
 //Routes
@@ -38,29 +38,29 @@ app.use("/api/order", orderRoutes);
 app.use("/api/notification", notificationRoutes);
 
 //Test
-import { buffer, compressAvatar } from "./utils/uploadImg.js";
-import sharp from "sharp";
-app.post(
-  "/test",
-  buffer.array("image", 5),
-  compressAvatar,
-  async (req: any, res) => {
-    const absoluteAvatarsFolderPath = path.resolve("uploads", "img");
+// import { buffer, compressAvatar } from "./utils/uploadImg.js";
+// import sharp from "sharp";
+// app.post(
+//   "/test",
+//   buffer.array("image", 5),
+//   compressAvatar,
+//   async (req: any, res) => {
+//     const absoluteAvatarsFolderPath = path.resolve("uploads", "img");
 
-    for (const file of req.files) {
-      await sharp(file.buffer).toFile(
-        path.join(absoluteAvatarsFolderPath, file.originalname)
-      );
-    }
+//     for (const file of req.files) {
+//       await sharp(file.buffer).toFile(
+//         path.join(absoluteAvatarsFolderPath, file.originalname)
+//       );
+//     }
 
-    res.send({ testTranslation: i18next.__("test") });
-  }
-);
-app.get("/schedule", (req, res) => {
-  const data = getJobs();
+//     res.send({ testTranslation: i18next.__("test") });
+//   }
+// );
+// app.get("/schedule", (req, res) => {
+//   const data = getJobs();
 
-  res.render("schedule", { data });
-});
+//   res.render("schedule", { data });
+// });
 
 //Start
 const start = async () => {
@@ -75,10 +75,13 @@ const start = async () => {
     const server = http.createServer(app)
     Io.init(server)
 
+    server.listen(8090, () => {
+      console.log("socket work");
+    });
+    
     app.listen(process.env.PORT, () => {
       console.log(`server started at ${process.env.PORT} port`);
     });
-    
   } catch (error) {
     console.log("start err", error);
   }
