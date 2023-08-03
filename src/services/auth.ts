@@ -18,6 +18,9 @@ export const signup = async (firstname, lastname, email, password) => {
   const username = `${firstname} ${lastname}`
 
   const user = await User.create({ username, email, password: hashPass })
+  const cart = await Cart.create({ owner: user._id });
+  user.cart = cart._id;
+  await user.save();
   
   const token = jwt.sign(
     { email, id: user._id, role: user.role },

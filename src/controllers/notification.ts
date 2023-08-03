@@ -2,7 +2,7 @@ import * as notificationService from "../services/notification.js";
 
 export const getMy = async (req, res) => {
   try {
-    const data = await notificationService.getMy();
+    const data = await notificationService.getMy(req.userId);
 
     res.status(200).json({ message: "get my notifications success", data });
   } catch (error) {
@@ -15,7 +15,7 @@ export const getMy = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const data = await notificationService.create();
+    const data = await notificationService.create(req.userId, 'test', 'тест');
 
     res.status(200).json({ message: "create notification success", data });
   } catch (error) {
