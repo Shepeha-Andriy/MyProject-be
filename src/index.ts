@@ -3,6 +3,7 @@ import mongoose, { ConnectOptions } from "mongoose";
 import cors from "cors";
 import donent from "dotenv";
 import helmet from "helmet";
+import http from 'http'
 import path from "path";
 
 import { i18next, langMiddleware } from "./utils/i18next.js";
@@ -13,6 +14,7 @@ import orderRoutes from "./routes/order.js";
 import notificationRoutes from "./routes/notification.js";
 import { getJobs, scheduleJobs } from "./utils/schedule/schedule.js";
 import { pathToSrc } from "./utils/Constants.js";
+import Io from './services/io.js'
 
 //Settings
 const app = express();
@@ -70,9 +72,13 @@ const start = async () => {
 
     await scheduleJobs();
 
+    const server = http.createServer(app)
+    Io.init(server)
+
     app.listen(process.env.PORT, () => {
       console.log(`server started at ${process.env.PORT} port`);
     });
+    
   } catch (error) {
     console.log("start err", error);
   }
