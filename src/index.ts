@@ -27,7 +27,7 @@ app.use(cors());
 app.use(express.json());
 app.use(i18next.init);
 app.use(langMiddleware);
-// app.use(helmet());
+app.use(helmet());
 app.use("/api/uploads/img", express.static("uploads/img"));
 
 //Routes

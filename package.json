@@ -8,8 +8,8 @@
     "build": "tsc",
     "start": "node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
-    "loadDbGoods": "node ./src/utils/seedDb/index.js -l",
-    "deleteDbGoods": "node ./src/utils/seedDb/index.js -d"
+    "loadDbGoods": "ts-node ./src/utils/seedDb/index.ts -lgoods",
+    "deleteDbGoods": "ts-node ./src/utils/seedDb/index.ts -dgoods"
   },
   "keywords": [],
   "author": "",

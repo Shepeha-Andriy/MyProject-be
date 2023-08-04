@@ -1,6 +1,7 @@
 import mongoose, { ConnectOptions } from "mongoose";
 import fs from 'fs'
 import Good from "../../models/Good.js";
+import Notification from "../../models/Notification.js";
 import donent from 'dotenv'
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -26,7 +27,7 @@ mongoose
 
 const users = JSON.parse(fs.readFileSync(`${__dirname}/data/goodSeed.json`, 'utf-8'))
 
-const loadData = async () => {
+const loadDataGoods = async () => {
   try {
     await Good.create(users)
     console.log('data loaded')
@@ -36,7 +37,7 @@ const loadData = async () => {
   }
 }
 
-const deleteData = async () => {
+const deleteDataGoods = async () => {
   try {
     await Good.deleteMany()
     console.log('data deleted')
@@ -46,8 +47,20 @@ const deleteData = async () => {
   }
 }
 
-if (process.argv[2] === '-l') {
-  loadData().then()
-} else if (process.argv[2] === '-d') {
-  deleteData().then()
+const deleteDataNotifications = async () => {
+  try {
+    await Notification.deleteMany()
+    console.log('data deleted')
+    mongoose.disconnect();
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+if (process.argv[2] === '-lgoods') {
+  loadDataGoods().then();
+} else if (process.argv[2] === '-dgoods') {
+  deleteDataGoods().then()
+} else if (process.argv[2] === '-dnotifications') {
+  deleteDataNotifications().then()
 }

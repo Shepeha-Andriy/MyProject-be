@@ -21,7 +21,7 @@ class Io {
         if (this.users.has(userId)) {
           this.users.delete(userId)
         }
-        console.log(userId)
+
         this.users.set(userId, socket.id);
       });
     });
