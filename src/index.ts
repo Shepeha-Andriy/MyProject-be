@@ -3,6 +3,7 @@ import mongoose, { ConnectOptions } from "mongoose";
 import cors from "cors";
 import donent from "dotenv";
 import helmet from "helmet";
+import http from 'http'
 import path from "path";
 
 import { i18next, langMiddleware } from "./utils/i18next.js";
@@ -13,6 +14,7 @@ import orderRoutes from "./routes/order.js";
 import notificationRoutes from "./routes/notification.js";
 import { getJobs, scheduleJobs } from "./utils/schedule/schedule.js";
 import { pathToSrc } from "./utils/Constants.js";
+import Io from './services/io.js'
 
 //Settings
 const app = express();
@@ -36,29 +38,29 @@ app.use("/api/order", orderRoutes);
 app.use("/api/notification", notificationRoutes);
 
 //Test
-import { buffer, compressAvatar } from "./utils/uploadImg.js";
-import sharp from "sharp";
-app.post(
-  "/test",
-  buffer.array("image", 5),
-  compressAvatar,
-  async (req: any, res) => {
-    const absoluteAvatarsFolderPath = path.resolve("uploads", "img");
+// import { buffer, compressAvatar } from "./utils/uploadImg.js";
+// import sharp from "sharp";
+// app.post(
+//   "/test",
+//   buffer.array("image", 5),
+//   compressAvatar,
+//   async (req: any, res) => {
+//     const absoluteAvatarsFolderPath = path.resolve("uploads", "img");
 
-    for (const file of req.files) {
-      await sharp(file.buffer).toFile(
-        path.join(absoluteAvatarsFolderPath, file.originalname)
-      );
-    }
+//     for (const file of req.files) {
+//       await sharp(file.buffer).toFile(
+//         path.join(absoluteAvatarsFolderPath, file.originalname)
+//       );
+//     }
 
-    res.send({ testTranslation: i18next.__("test") });
-  }
-);
-app.get("/schedule", (req, res) => {
-  const data = getJobs();
+//     res.send({ testTranslation: i18next.__("test") });
+//   }
+// );
+// app.get("/schedule", (req, res) => {
+//   const data = getJobs();
 
-  res.render("schedule", { data });
-});
+//   res.render("schedule", { data });
+// });
 
 //Start
 const start = async () => {
@@ -70,6 +72,13 @@ const start = async () => {
 
     await scheduleJobs();
 
+    const server = http.createServer(app)
+    Io.init(server)
+
+    server.listen(8090, () => {
+      console.log("socket work");
+    });
+    
     app.listen(process.env.PORT, () => {
       console.log(`server started at ${process.env.PORT} port`);
     });

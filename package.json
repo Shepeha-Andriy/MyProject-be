@@ -8,8 +8,8 @@
     "build": "tsc",
     "start": "node ./dist/index.js",
     "dev": "nodemon ./src/index.ts",
-    "loadDbGoods": "node ./src/utils/seedDb/index.js -l",
-    "deleteDbGoods": "node ./src/utils/seedDb/index.js -d"
+    "loadDbGoods": "ts-node ./src/utils/seedDb/index.ts -lgoods",
+    "deleteDbGoods": "ts-node ./src/utils/seedDb/index.ts -dgoods"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +31,7 @@
     "node-fetch": "^3.3.1",
     "nodemailer": "^6.9.3",
     "sharp": "^0.32.3",
+    "socket.io": "^4.7.2",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
