@@ -3,7 +3,7 @@ import { getJobs } from '../utils/schedule/schedule.js';
 
 export const downloadPdfOrderInfo = async (req, res) => {
   try {
-    const data = downloadPdf(res)
+    const data = downloadPdf(res, req.userId)
 
     // res.status(200).json({ message: "all goods success", data });
   } catch (error) {
