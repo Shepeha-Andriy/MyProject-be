@@ -11,11 +11,5 @@ import { getAll } from '../controllers/good.js'
 import { authMiddleware } from '../middlewares/auth.js';
 
 router.get('/all', getAll)
-// router.get('/cart', authMiddleware, getCartGoods)
-
-// router.post('/addTocart', authMiddleware, addToCart)
-// router.post('/removeFromCart', authMiddleware, removeFromCart)
-// router.post('/increaseCart', authMiddleware, increaseCart)
-// router.post('/decreaseCart', authMiddleware, decreaseCart)
 
 export default router

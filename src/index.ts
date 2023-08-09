@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose, { ConnectOptions } from "mongoose";
+import mongoSanitize from "express-mongo-sanitize";
 import cors from "cors";
 import donent from "dotenv";
 import helmet from "helmet";
@@ -12,6 +13,7 @@ import goodRoutes from "./routes/good.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/order.js";
 import notificationRoutes from "./routes/notification.js";
+import extraRoures from './routes/extra.js'
 import { getJobs, scheduleJobs } from "./utils/schedule/schedule.js";
 import { pathToSrc } from "./utils/Constants.js";
 import Io from './services/io.js'
@@ -25,6 +27,7 @@ app.set("view engine", "ejs");
 //Middleware
 app.use(cors());
 app.use(express.json());
+app.use(mongoSanitize())
 app.use(i18next.init);
 app.use(langMiddleware);
 app.use(helmet());
@@ -36,6 +39,7 @@ app.use("/api/good", goodRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/notification", notificationRoutes);
+app.use('/api/extra', extraRoures)
 
 //Test
 // import { buffer, compressAvatar } from "./utils/uploadImg.js";
@@ -56,11 +60,6 @@ app.use("/api/notification", notificationRoutes);
 //     res.send({ testTranslation: i18next.__("test") });
 //   }
 // );
-// app.get("/schedule", (req, res) => {
-//   const data = getJobs();
-
-//   res.render("schedule", { data });
-// });
 
 //Start
 const start = async () => {
