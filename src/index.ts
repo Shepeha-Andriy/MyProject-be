@@ -6,15 +6,17 @@ import donent from "dotenv";
 import helmet from "helmet";
 import http from 'http'
 import path from "path";
+import cookieParser from 'cookie-parser'
 
 import { i18next, langMiddleware } from "./utils/i18next.js";
 import authRoutes from "./routes/auth.js";
 import goodRoutes from "./routes/good.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/order.js";
+import userRoutes from "./routes/user.js";
 import notificationRoutes from "./routes/notification.js";
 import extraRoures from './routes/extra.js'
-import { getJobs, scheduleJobs } from "./utils/schedule/schedule.js";
+import { scheduleJobs } from "./utils/schedule/schedule.js";
 import { pathToSrc } from "./utils/Constants.js";
 import Io from './services/io.js'
 
@@ -25,7 +27,8 @@ app.set("views", path.join(pathToSrc, "utils", "schedule"));
 app.set("view engine", "ejs");
 
 //Middleware
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(mongoSanitize())
 app.use(i18next.init);
@@ -38,6 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/good", goodRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/notification", notificationRoutes);
 app.use('/api/extra', extraRoures)
 

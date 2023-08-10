@@ -13,7 +13,6 @@ export const downloadPdf = async (res, userId) => {
   const doc = new PDFDocument();
   const pdfPath = path.join(pathToSrc, '..', '/uploads', "orders.pdf");
 
-  // doc.text("Hello World");
   doc.font("Helvetica-Bold");
   doc.text("Orders List", { align: "center", underline: true });
   doc.moveDown();

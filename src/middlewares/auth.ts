@@ -9,8 +9,23 @@ export const authMiddleware = async (req, res, next) => {
     let decodedData
 
     if (token && isCustomAuth) {
-      decodedData = jwt.verify(token, process.env.JWT_SECRET)
-
+      try {
+        decodedData = jwt.verify(
+          token,
+          process.env.JWT_SECRET,
+          // (err, decoded) => {
+          //   if (err && err instanceof jwt.TokenExpiredError) {
+          //     console.log(24523452)
+          //     return res
+          //       .status(401)
+          //       .json({ message: "token has expired", err: err.message });
+          //   }
+          // }
+        );
+      } catch (error) {
+        return res.status(401).json({message: 'un authorized', err: error.message})
+      }
+      
       req.userId = decodedData?.id
     } else {
       decodedData = jwt.decode(token)
@@ -19,6 +34,7 @@ export const authMiddleware = async (req, res, next) => {
       const user = await User.findOne({ googleId })
   
       req.userId = user?._id.toString()
+      req.user = { ...user, ...decodedData }
     }
 
     next()

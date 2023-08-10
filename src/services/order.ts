@@ -66,6 +66,9 @@ export const createOrder = async (data) => {
   const order = await Order.create({
     owner: data.userId,
     orderId: data.orderId,
+    items: data.items,
+    amount: data.amount,
+    cost: data.price
   });
 
   return order._id;
@@ -80,7 +83,8 @@ export const captureOrder = async (orderId) => {
   }
 
   order.status = "confirmed";
-  order.jobTime = new Date(Date.now() + 3 * 60 * 60 * 1000);
+  // order.jobTime = new Date(Date.now() + 3 * 60 * 60 * 1000);
+  order.jobTime = new Date(Date.now() + 20 * 1000);
   await order.save();
 
   scheduleOrderConfirmedJob(order);

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import zxcvbn from 'zxcvbn'
 import User from "../models/User.js"
 import Cart from "../models/Cart.js"
+import Token from '../models/Token.js'
 
 import { BLOCK_TIME, MAX_LOGIN_ATTEMPT_TO_BLOCK } from '../utils/Constants.js'
 import { signInInvalidCredentials } from '../messages/errorMessages.js'
@@ -21,14 +22,11 @@ export const signup = async (firstname, lastname, email, password) => {
   const cart = await Cart.create({ owner: user._id });
   user.cart = cart._id;
   await user.save();
-  
-  const token = jwt.sign(
-    { email, id: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  )
 
-  return {user, token}
+  const { token, rtoken } = generateTokens(user)
+  await saveToken(user.id, rtoken)
+
+  return { user, token, rtoken }
 }
 
 //sign in
@@ -66,14 +64,35 @@ export const signin = async ( email, password ) => {
     throw new Error(signInInvalidCredentials());
   }
   
-  const token = jwt.sign(
-    { email, id: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '1h' }
-  )
+  const { token, rtoken } = generateTokens(user);
+  await saveToken(user.id, rtoken);
 
-  return {user, token}
+  return { user, token, rtoken }
 }
+
+//refresh
+export const refresh = async (refreshToken) => {
+  if (!refreshToken) {
+      throw Error('unauthorized')
+  }
+ 
+  const userData: any = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+  const tokenFromDb = await Token.findOne({ refreshToken });
+  // console.log('tfb',userData, tokenFromDb)
+  if (!userData || !tokenFromDb) {
+      throw Error("unauthorized");
+  }
+  
+  const user = await User.findById(userData.id);
+  const tokens = generateTokens(user);
+  await saveToken(user.id, tokens.rtoken);
+
+  return {...tokens, user}
+}
+
+//logout
+export const logout = async (rtoken) => {};
 
 // google auth
 export const googleAuth = async (username, email, googleId, token) => {
@@ -87,7 +106,42 @@ export const googleAuth = async (username, email, googleId, token) => {
   user.cart = cart._id
   await user.save()
 
-  return {user, token}
+  return { user, token }
+}
+
+//tokens
+export const generateTokens = (user) => {
+  const token = jwt.sign(
+    { email: user.email, id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "15h" }
+  );
+  
+  const rtoken = jwt.sign(
+    { email: user.email, id: user._id, role: user.role },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: "30d" }
+  );
+
+  return { token, rtoken }
+}
+
+const saveToken = async(userId, refreshToken) => {
+  const tokenData = await Token.findOne({ user: userId });
+  if (tokenData) {
+      tokenData.refreshToken = refreshToken;
+      return tokenData.save();
+  }
+
+  const token = await Token.create({ user: userId, refreshToken });
+  
+  return token;
+}
+
+const removeToken = async(refreshToken) => {
+  const tokenData = await Token.deleteOne({ refreshToken });
+  
+  return tokenData;
 }
 
 // checks

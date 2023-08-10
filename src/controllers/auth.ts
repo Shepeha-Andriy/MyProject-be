@@ -16,6 +16,7 @@ export const signup = async (req, res) => {
     // await sendActivationEmail(email, `${process.env.SERVER_URL}/api/auth/activate/${data.user._id}`)
     // await mailer.sendActivationEmail(email, `${process.env.SERVER_URL}/api/auth/activate/${data.user._id}`)
 
+    res.cookie('refreshToken', data.rtoken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
     res.status(201).json({message: 'sign up success', data})
   } catch (error) {
     res.status(400).json({message: 'something went wrong during signup', err: error.message})
@@ -29,8 +30,41 @@ export const signin = async (req, res) => {
     authService.haveRequiredSignInValues(email, password)
     
     const data = await authService.signin(email, password)
-
+    
+    res.cookie('refreshToken', data.rtoken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
     res.status(200).json({message: 'sign in success', data})
+  } catch (error) {
+    res.status(400).json({message: 'something went wrong during signin', err: error.message})
+  }
+}
+
+export const refresh = async (req, res) => {
+  try {
+    const { refreshToken } = req.cookies;
+    
+    const data = await authService.refresh(refreshToken);
+    
+    res.cookie("refreshToken", data.rtoken, {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
+    
+    res.status(200).json({ message: "sign in success", data });
+  } catch (error) {
+    res.status(400).json({ message: "something went wrong during refresh", err: error.message });
+  }
+}
+
+export const logout = async (req, res) => {
+  try {
+    const { rtoken } = req.cookies
+    
+    await authService.logout(rtoken);
+    
+    // const data = await authService.signin(email, password)
+
+    res.clearCookie("refreshToken");
+    // res.status(200).json({message: 'sign in success', data})
   } catch (error) {
     res.status(400).json({message: 'something went wrong during signin', err: error.message})
   }

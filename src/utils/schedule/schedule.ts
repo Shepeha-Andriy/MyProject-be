@@ -1,5 +1,7 @@
 import { CronJob } from "cron";
 import Order from "../../models/Order.js";
+import Io from "../../services/io.js";
+import Notification from "../../models/Notification.js";
 
 export const jobs = new Map();
 
@@ -15,7 +17,8 @@ export async function scheduleOrderConfirmedJob(order) {
     const job = new CronJob(
       order.jobTime,
       async function () {
-        order.jobTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+        // order.jobTime = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+        order.jobTime = new Date(Date.now() + 20 * 1000);
         order.status = "sent";
         order.save();
 
@@ -51,6 +54,13 @@ export async function scheduleOrderSentJob(order) {
         order.status = "delivered";
         order.save();
 
+        const newNotifications = await Notification.create({
+          user: order.owner,
+          uaMessage: 'товар доставлений',
+          enMessage: 'goods are delivered'
+        })
+        Io.io.to(Io.users.get(order.owner._id.toString())).emit("message", newNotifications);
+    
         job.stop();
         jobs.delete(jobId);
       },
