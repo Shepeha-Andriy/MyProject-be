@@ -7,9 +7,13 @@ const limiter = rateLimit({
   max: 10, // Максимальна кількість запитів за 1 хвилину
 });
 
-import { getUserBySub } from '../controllers/user.js'
+import { getUserBySub, forgotPass, changePass } from '../controllers/user.js'
 import { authMiddleware } from '../middlewares/auth.js';
+import { forgotPassRequest } from '../services/user.js';
 
 router.get('/:sub', authMiddleware, getUserBySub)
+router.patch('/forgotpassrequest/:email', forgotPassRequest)
+router.patch('/forgotpass/:id', forgotPass)
+router.patch('/changepass', authMiddleware, changePass)
 
 export default router

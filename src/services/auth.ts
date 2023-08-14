@@ -126,7 +126,7 @@ export const generateTokens = (user) => {
   return { token, rtoken }
 }
 
-const saveToken = async(userId, refreshToken) => {
+export const saveToken = async(userId, refreshToken) => {
   const tokenData = await Token.findOne({ user: userId });
   if (tokenData) {
       tokenData.refreshToken = refreshToken;

@@ -11,7 +11,7 @@ import { downloadPdfOrderInfo, test, schedule } from "../controllers/extra.js";
 import { authMiddleware } from "../middlewares/auth.js";
 
 router.get("/download-orderInfo", authMiddleware, downloadPdfOrderInfo);
-router.get("/test", test);
+router.post("/test", test);
 router.get("/schedule", schedule);
 
 export default router;
